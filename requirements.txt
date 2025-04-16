@@ -9,3 +9,4 @@ langchain-core
 langchain-huggingface
 python-dotenv
 gunicorn
+langchain-community

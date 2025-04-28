@@ -5,14 +5,13 @@ from utils.conversation import chatbot_response
 from dotenv import load_dotenv
 import os
 
-# Load environment variables
 load_dotenv()
 
-# Initialize Flask app
-app = Flask(__name__)
-CORS(app)  # Enable CORS for all routes
 
-# Dictionary to store user sessions
+app = Flask(__name__)
+CORS(app) 
+
+
 user_sessions = {}
 
 @app.route('/api/health', methods=['GET'])
@@ -25,7 +24,7 @@ def chat():
     """Process chat messages"""
     data = request.json
     
-    # Get or create user session
+  
     session_id = data.get('sessionId')
     if not session_id or session_id not in user_sessions:
         session_id = str(uuid.uuid4())
@@ -34,14 +33,14 @@ def chat():
             "created_at": os.path.basename(__file__)
         }
     
-    # Process message
+   
     message = data.get('message', '')
     location = data.get('location', None)
     
     if not message:
         return jsonify({"error": "No message provided"}), 400
     
-    # Get response from chatbot
+ 
     user_id = user_sessions[session_id]["user_id"]
     response = chatbot_response(user_id, message, location)
     

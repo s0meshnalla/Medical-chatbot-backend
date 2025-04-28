@@ -9,20 +9,19 @@ from langchain_core.chat_history import InMemoryChatMessageHistory
 from langchain_core.messages import HumanMessage, AIMessage
 from dotenv import load_dotenv
 
-# Load environment variables
+
 load_dotenv()
 
-# Configuration
+
 SUPABASE_URL = os.getenv("SUPABASE_URL", "https://jbzkxnclqwsjbkcaczkd.supabase.co")
 SUPABASE_KEY = os.getenv("SUPABASE_KEY", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Impiemt4bmNscXdzamJrY2FjemtkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQ3MDIwMzQsImV4cCI6MjA2MDI3ODAzNH0.xZR7af9CAQLYBfckVUFxSnhDBo-rvk3qSLl_OB8JKOo")
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "AIzaSyDfCY7ZD-5sTiBTW_xb7WHKzzCxmtJJI14")
 
-# Initialize clients
+
 supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
 embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
 genai.configure(api_key=GEMINI_API_KEY)
 
-# Gemini LLM
 class GeminiLLM(LLM):
     def _call(self, prompt: str, stop: list = None) -> str:
         model = genai.GenerativeModel("gemini-1.5-flash")
@@ -33,7 +32,7 @@ class GeminiLLM(LLM):
     def _llm_type(self) -> str:
         return "gemini"
 
-# Memory
+
 class CustomConversationBufferMemory:
     def __init__(self):
         self.chat_history = InMemoryChatMessageHistory()
@@ -50,7 +49,7 @@ class CustomConversationBufferMemory:
     def clear(self):
         self.chat_history.clear()
 
-# Initialize memory and LLM
+
 memory = CustomConversationBufferMemory()
 llm_instance = None
 
@@ -60,7 +59,7 @@ def get_llm():
         llm_instance = GeminiLLM()
     return llm_instance
 
-# Vector store
+
 def get_vector_store():
     verify_supabase_schema()
     return SupabaseVectorStore(
@@ -70,10 +69,10 @@ def get_vector_store():
         query_name="match_documents"
     )
 
-# Schema verification
+
 def verify_supabase_schema():
     try:
-        # Check if table exists
+
         supabase.table("medical_conversations").select("id").limit(1).execute()
         print("Supabase schema verified.")
         return True
@@ -81,7 +80,6 @@ def verify_supabase_schema():
         print(f"Schema error: {e}")
         print("Creating schema...")
         
-        # Create tables and functions via SQL
         create_schema_sql = """
         CREATE EXTENSION IF NOT EXISTS vector;
         
@@ -120,8 +118,7 @@ def verify_supabase_schema():
         """
         
         try:
-            # Execute SQL - in production, you'd want to use a proper migration system
-            # This is just for demo purposes
+
             response = supabase.execute_sql(create_schema_sql)
             print("Schema created successfully")
             return True

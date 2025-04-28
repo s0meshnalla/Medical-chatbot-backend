@@ -2,7 +2,7 @@ import os
 from datetime import datetime
 import google.generativeai as genai
 from langchain_huggingface import HuggingFaceEmbeddings
-from langchain.vectorstores import SupabaseVectorStore
+from langchain_community.vectorstores import SupabaseVectorStore
 from supabase import create_client
 from langchain.llms.base import LLM
 from langchain_core.chat_history import InMemoryChatMessageHistory

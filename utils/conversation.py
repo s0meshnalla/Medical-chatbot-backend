@@ -98,8 +98,8 @@ def chatbot_response(user_id: str, query: str, user_location: str = None) -> dic
         
         Response:
         """
-        
-        response = llm(prompt)
+        response = llm.invoke(prompt)
+
         result = {"response": response}
     
     # Add AI response to memory

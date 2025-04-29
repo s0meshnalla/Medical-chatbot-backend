@@ -12,10 +12,10 @@ def store_conversation(user_id: str, query: str, response: dict):
         "query_type": detect_query_type(query)
     }
     
-    # Create embedding
+    
     embedding = embeddings.embed_documents([document])[0]
     
-    # Store in Supabase
+    
     supabase.table("medical_conversations").insert({
         "content": document,
         "metadata": metadata,
@@ -51,24 +51,24 @@ def detect_query_type(query: str) -> str:
 
 def chatbot_response(user_id: str, query: str, user_location: str = None) -> dict:
     """Process user query and generate appropriate response"""
-    # Get past context
+    
     past_context = retrieve_context(user_id, query)
     context_str = "\n".join(past_context) if past_context else "No prior context."
     
-    # Add user message to memory
+    
     memory.add_user_message(query)
     
-    # Determine query type and process accordingly
+    
     query_type = detect_query_type(query)
     llm = get_llm()
     
     if query_type == "symptom":
-        # Use symptom checker for symptom-related queries
+        
         result = symptom_checker(query)
         response = result["possible_causes"]
         
     elif query_type == "location":
-        # Use clinic locator for location-related queries
+        
         location = user_location if user_location else "Unknown location"
         if location == "Unknown location":
             response = "Please provide your location so I can find nearby medical facilities."
@@ -80,12 +80,12 @@ def chatbot_response(user_id: str, query: str, user_location: str = None) -> dic
                 response = f"Error finding clinics: {clinics[0]['error']}"
                 result = {"response": response, "clinics": []}
             else:
-                # Format clinic information for display
+                
                 response = "I found these medical facilities near you:"
                 result = {"response": response, "clinics": clinics}
                 
     else:
-        # General medical question
+        
         prompt = f"""
         Previous conversation context:
         {context_str}
@@ -102,10 +102,10 @@ def chatbot_response(user_id: str, query: str, user_location: str = None) -> dic
 
         result = {"response": response}
     
-    # Add AI response to memory
+    
     memory.add_ai_message(response)
     
-    # Store conversation
+    
     store_conversation(user_id, query, result)
     
     return {

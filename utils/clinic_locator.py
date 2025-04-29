@@ -5,7 +5,7 @@ from datetime import datetime
 def clinic_locator(user_location: str) -> list:
     """Find nearby clinics and hospitals using OpenStreetMap APIs"""
     try:
-        time.sleep(1)  # Respect API rate limits
+        time.sleep(1) 
         print(f"Geocoding: {user_location}")
         
         # Step 1: Convert location to coordinates using Nominatim
@@ -62,7 +62,7 @@ def clinic_locator(user_location: str) -> list:
             }
             clinics.append(clinic)
         
-        # Sort by proximity
+        
         clinics = sorted(clinics, key=lambda x: 
             (x["lat"] - lat)**2 + (x["lon"] - lng)**2)[:10]
         

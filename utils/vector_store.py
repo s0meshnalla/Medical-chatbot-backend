@@ -13,9 +13,9 @@ from dotenv import load_dotenv
 load_dotenv()
 
 
-SUPABASE_URL = os.getenv("SUPABASE_URL", "https://jbzkxnclqwsjbkcaczkd.supabase.co")
-SUPABASE_KEY = os.getenv("SUPABASE_KEY", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Impiemt4bmNscXdzamJrY2FjemtkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQ3MDIwMzQsImV4cCI6MjA2MDI3ODAzNH0.xZR7af9CAQLYBfckVUFxSnhDBo-rvk3qSLl_OB8JKOo")
-GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "AIzaSyDfCY7ZD-5sTiBTW_xb7WHKzzCxmtJJI14")
+SUPABASE_URL = os.getenv("SUPABASE_URL")
+SUPABASE_KEY = os.getenv("SUPABASE_KEY")
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 
 
 supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
